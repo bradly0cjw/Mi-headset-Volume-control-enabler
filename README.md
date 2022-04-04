@@ -1,2 +1,3 @@
 # Mi-headset-Volume-control-enabler
-Like what title says
+Enable mi headset volume controller on PixelExperience 12 /Evolution X 12.1
+
