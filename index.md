@@ -1,6 +1,8 @@
-## 歡迎來到 Bradly0cjw 的亂搞小屋
-
-[回到主頁](https://bradly0cjw.github.io)
+---
+title: MI Headset Volume Control Enabler
+layout: back
+filename: index
+--- 
 
 ## MI Headset Volume Control Enabler
 
