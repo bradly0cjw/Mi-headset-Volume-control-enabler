@@ -35,6 +35,6 @@ jobs:
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: Mi-headset.zip
+        files: Magisk_Module/Mi-headset.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
