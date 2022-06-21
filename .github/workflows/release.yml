@@ -28,7 +28,7 @@ jobs:
 #         composer install -o -q
     - name: Zip Folder
       run: 
-          cd Magisk_Module
+          cd Magisk_Module;
           zip -r ${{ github.event.repository.name }}.zip . -x ".git/*" ".github/*" "phpcs.xml" "composer.json" "composer.lock" ".gitignore"
 
     - name: Release
