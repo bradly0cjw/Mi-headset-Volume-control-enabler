@@ -1,0 +1,48 @@
+name: Make Release
+
+on:
+  push:
+    tags: '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        name: Grab Source
+        with:
+          ref: 'main'
+
+      
+      - name: Run the zip script
+        run: .github/make_zip.sh
+
+      - name: Upload Zip
+        uses: actions/upload-artifact@v2
+        with:
+          name: Mi-Headset.zip
+          path: output
+
+      - name: Release the binaries
+        uses: Hs1r1us/Release-AIO@v1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body_path: 'releaseNotes.md'
+          prerelease: false
+          draft: true
+          asset_files: 'output/Mi-Headset.zip'
+
+      - name: Commit version bump
+        uses: github-actions-x/commit@v2.9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          push-branch: 'main'
+          commit-message: 'release'
+          force-add: 'true'
+          files: readme.md
+          name: bradly0cjw
+          email: bradly093@gmail.com
