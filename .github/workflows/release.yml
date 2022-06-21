@@ -1,48 +1,38 @@
-name: Make Release
+
+name: Create release
 
 on:
-  push:
-    tags: '*'
+  release:
+    types:
+      - created
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-        name: Grab Source
-        with:
-          ref: 'main'
+    - uses: actions/checkout@v2
 
-      
-      - name: Run the zip script
-        run: .github/make_zip.sh
+    - name: Get Composer Cache Directory
+      id: composer-cache
+      run: |
+        echo "::set-output name=dir::$(composer config cache-files-dir)"
+    - uses: actions/cache@v2
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
+    - name: Install dependencies
+      run: |
+        composer install -o -q
+    - name: Zip Folder
+      run: zip -r ${{ github.event.repository.name }}.zip . -x ".git/*" ".github/*" "phpcs.xml" "composer.json" "composer.lock" ".gitignore"
 
-      - name: Upload Zip
-        uses: actions/upload-artifact@v2
-        with:
-          name: Mi-Headset.zip
-          path: output
-
-      - name: Release the binaries
-        uses: Hs1r1us/Release-AIO@v1.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          body_path: 'releaseNotes.md'
-          prerelease: false
-          draft: true
-          asset_files: 'output/Mi-Headset.zip'
-
-      - name: Commit version bump
-        uses: github-actions-x/commit@v2.9
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          push-branch: 'main'
-          commit-message: 'release'
-          force-add: 'true'
-          files: readme.md
-          name: bradly0cjw
-          email: bradly093@gmail.com
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: ${{ github.event.repository.name }}.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
