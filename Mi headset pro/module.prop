@@ -1,6 +1,7 @@
 id=MIHVCE
 name=MI Headset volume control enabler
 version=v12.1
-versionCode=10000
+versionCode=10001
 author=BradlyCJW
 description=enable volume control Test on Evolution X Davinci
+updateJson=https://raw.githubusercontent.com/bradly0cjw/Mi-headset-Volume-control-enabler/main/Update.json
